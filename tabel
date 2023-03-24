@@ -1,0 +1,83 @@
+class raster:
+    def __init__(self, x, teken):
+        self.x = x
+        self.lenx = len(x)
+        self.y = []
+        self.teken = teken
+        self.curr_id = -1
+
+    def append(self, y):
+        if self.lenx == len(y):
+            self.y.append(y)
+            self.curr_id += 1
+            return f'{self.curr_id}'
+        else:
+            raise error
+
+    def remove(self, Id):
+        self.y.pop(Id)
+        return 'succes'
+
+    def build(self, left='$', right='$', fillchar='~'):
+        maxlen = []
+        ally = [self.x] + self.y
+        for maximus in range(self.lenx):
+            maxnow = 0
+            for a in ally:
+                length_of_a = len(str(a[maximus]))
+                if length_of_a > maxnow:
+                    maxnow = length_of_a
+            maxlen.append(maxnow)
+        for a in ally:
+            for b in a:
+                get = str(b)
+                if len(get) < maxlen[a.index(b)] + 1:
+                    for missing in range(maxlen[a.index(b)] - len(get)):
+                        get += ' '
+                    if len(a) - 1 != a.index(b):
+                        ally[ally.index(a)][a.index(b)] = get.capitalize() + self.teken
+        line = []
+        for a in ally:
+            c = ''
+            for b in a:
+                c += str(b)
+            line.append(c)
+        getmax = 0
+        for l in line:
+            if getmax < len(l):
+                getmax = len(l)
+        print('<' + ('~' * getmax) + '>')
+        v = []
+        for l in line:
+            if line.index(l) != 0:
+                v.append(left + l + (getmax - len(l)) * ' ' + right)
+                print(left + l + (getmax - len(l)) * ' ' + right)
+            else:
+                v.append(left + l + (getmax - len(l)) * ' ' + right)
+                print(left + l + (getmax - len(l)) * ' ' + right)
+                maxi = len(left + l + (getmax - len(l)) * ' ' + right)
+                printnow = left
+                listy = []
+                curr = -1
+                for a in maxlen:
+                    curr += a + 1
+                    listy.append(curr)
+                listy.pop(len(listy) - 1)
+                for a in range(maxi - len(self.teken) * 2):
+                    if a in listy:
+                        printnow += self.teken
+                    else:
+                        printnow += fillchar
+                print('' + printnow + right)
+        print('<' + '~' * getmax + ">")
+        return v
+
+    def get(self, inter):
+        return self.y[inter]
+
+
+if __name__ == "__main__":
+    raster = raster(['name', 'age', 'Home'], '!')
+    raster.append(['Tygo', '14', 'Jirnsum'])
+    raster.append(['Jilan', '15', 'Leeuwarden'])
+    raster.build('$', '$', '~')
